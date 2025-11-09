@@ -226,7 +226,7 @@ class rXMLRPCRequest
 						global $rpcLogFaults;
 						if($rpcLogFaults && $this->important)
 						{
-							FileUtil::toLog($this->content);
+							FileUtil::toLog($this->content, E_USER_WARNING);
 							FileUtil::toLog($answer);
 						}
 						break;

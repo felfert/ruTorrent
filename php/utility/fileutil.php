@@ -233,23 +233,28 @@ class FileUtil
 		return(rmdir($dir));
 	}
 	
-	public static function toLog( $str )
+	public static function toLog( $str, $lvl =  E_USER_NOTICE )
 	{		
 		global $log_file;
 		if( $log_file && strlen( $log_file ) > 0 )
-		{
-			// dmrom: set proper permissions (need if rtorrent user differs from www user)
-			if( !is_file( $log_file ) )
-			{
-				touch( $log_file );
-				chmod( $log_file, 0666 );
-			}
-			$w = fopen( $log_file, "ab+" );
-			if( $w )
-			{
-				fputs( $w, "[".date_create()->format('Y-m-d H:i:s')."] {$str}\n" );
-				fclose( $w );
-			}
+        {
+            if ( $log_file === "system" )
+            {
+                trigger_error(str_replace("\r\n", "\n", $str), $lvl);
+            } else {
+			    // dmrom: set proper permissions (need if rtorrent user differs from www user)
+			    if( !is_file( $log_file ) )
+			    {
+				    touch( $log_file );
+				    chmod( $log_file, 0666 );
+			    }
+			    $w = fopen( $log_file, "ab+" );
+			    if( $w )
+			    {
+				    fputs( $w, "[".date_create()->format('Y-m-d H:i:s')."] {$str}\n" );
+				    fclose( $w );
+                }
+            }
 		}
 	}
 	
